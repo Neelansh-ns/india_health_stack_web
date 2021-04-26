@@ -8,10 +8,10 @@ import 'package:ui/factory/core/base_view_out_state.dart';
 import 'package:ui/factory/core/base_view_state.dart';
 import 'package:use_case/maps_location/get_lat_lng_from_js_object.dart';
 
-class BounceMapNewView extends BaseView<BounceMapState, BounceMapOutState> {
+class IndiaHealthStackMapView extends BaseView<IndiaHealthStackMapViewState, IndiaHealthStackMapViewOutState> {
   GetLatLngFromLocationJsObject _getLatLngFromLocationJsObject;
 
-  BounceMapNewView(this._getLatLngFromLocationJsObject);
+  IndiaHealthStackMapView(this._getLatLngFromLocationJsObject);
 
   void init(List<List<LatLng>> polygonPoints, LatLng userLatLng) {
     state._userLatLng = userLatLng;
@@ -82,15 +82,6 @@ class BounceMapNewView extends BaseView<BounceMapState, BounceMapOutState> {
 //      List<googleMaps.LatLng> decodedPathPoints) async {
 //  }
 
-  @override
-  BounceMapState initializeState() {
-    return BounceMapState();
-  }
-
-  @override
-  BounceMapOutState initializeOutState() {
-    return null;
-  }
 
   void mapJsObjectToLatLng(center) {
     LatLng _latLng = _getLatLngFromLocationJsObject.execute(center);
@@ -102,9 +93,19 @@ class BounceMapNewView extends BaseView<BounceMapState, BounceMapOutState> {
   void moveToCurrentLocation() {
     state._moveToCurrentLocation.add(true);
   }
+
+  @override
+  IndiaHealthStackMapViewOutState initializeOutState() {
+    return IndiaHealthStackMapViewOutState();
+  }
+
+  @override
+  IndiaHealthStackMapViewState initializeState() {
+    return IndiaHealthStackMapViewState();
+  }
 }
 
-class BounceMapState extends BaseViewState {
+class IndiaHealthStackMapViewState extends BaseViewState {
   BehaviorSubject<LatLng> _cameraTarget = BehaviorSubject();
   BehaviorSubject<String> _currentAddress = BehaviorSubject.seeded('');
   BehaviorSubject<bool> _isMapIdle = BehaviorSubject.seeded(true);
@@ -139,4 +140,4 @@ class BounceMapState extends BaseViewState {
   }
 }
 
-class BounceMapOutState extends BaseViewOutState {}
+class IndiaHealthStackMapViewOutState extends BaseViewOutState {}

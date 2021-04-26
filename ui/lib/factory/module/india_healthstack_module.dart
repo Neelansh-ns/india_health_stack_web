@@ -10,15 +10,7 @@ class IndiaHealthStackModule {
 //  static Alice alice;
   static bool enableOnScreenCrash = kReleaseMode ? false : true;
   static IndiaHealthStackModule _instance;
-  // LTRRepo _ltrRepoInstance;
-  // UserRepo _userRepoInstance;
-  // GatewayRepo _gatewayRepoInstance;
   MapsRepo _mapsRepoInstance;
-  // AnalyticsHelperService _analyticsHelperService;
-  // PlatformRepo _platformRepoInstance;
-  // PhonePeRemoteApi _phonePeRemoteApiInstance;
-  // BounceLtrPaymentsRemoteApi _ltrRemotePaymentApiInstance;
-  // BounceLtrRemoteApi _ltrRemoteApiInstance;
   MapsRemoteApi _mapsRemoteApiInstance;
   // ErrorRepo _errorRepoInstance;
 
@@ -52,15 +44,15 @@ class IndiaHealthStackModule {
     return _healthDataModule;
   }
 
-  MapModule _bounceMapModuleInstance;
+  MapModule _mapModuleInstance;
 
   MapModule mapModule() {
-    if (_bounceMapModuleInstance == null) {
-      _bounceMapModuleInstance = MapModule(
+    if (_mapModuleInstance == null) {
+      _mapModuleInstance = MapModule(
         _mapsRepo(),
       );
     }
-    return _bounceMapModuleInstance;
+    return _mapModuleInstance;
   }
 
   IndiaHealthStackRepo indiaHealthStackRepo() {
@@ -80,27 +72,6 @@ class IndiaHealthStackModule {
     }
     return _mapsRepoInstance;
   }
-
-  // AnalyticsHelperService _analyticsService() {
-  //   if (_analyticsHelperService == null) {
-  //     _analyticsHelperService = CleverTapService();
-  //   }
-  //   return _analyticsHelperService;
-  // }
-
-  // PlatformRepo _platformRepo() {
-  //   if (_platformRepoInstance == null) {
-  //     _platformRepoInstance = WebPlatformRepo();
-  //   }
-  //   return _platformRepoInstance;
-  // }
-
-  // ErrorRepo _errorRepo() {
-  //   if (_errorRepoInstance == null) {
-  //     _errorRepoInstance = BounceErrorRepo();
-  //   }
-  //   return _errorRepoInstance;
-  // }
 
   MapsRemoteApi _mapsRemoteApi() {
     if (_mapsRemoteApiInstance == null) {
