@@ -184,9 +184,9 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(snapshot.data[index].name),
-                              Text(snapshot.data[index].numberOfAvailableBeds.toString()),
-                              Text(snapshot.data[index].numberOfBeds.toString()),
+                              Text(snapshot.data[index].hospitalName),
+                              Text(snapshot.data[index].resourcesList.first.countAvailable.toString()),
+                              Text(snapshot.data[index].resourcesList.last.countAvailable.toString()),
                             ],
                           ),
                         );

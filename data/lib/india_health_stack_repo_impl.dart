@@ -35,8 +35,8 @@ class IndiaHealthStackRepoImplementation extends IndiaHealthStackRepo{
 
   @override
   Future<List<HospitalEntity>> getHospitalData(int index) {
-    HospitalEntity _hospitalEntity = HospitalEntity(name: "Apollo Hospital",numberOfAvailableBeds:2 ,numberOfBeds: 1);
-    HospitalEntity _hospitalEntity2 = HospitalEntity(name: "Crazy Hospital",numberOfAvailableBeds:5 ,numberOfBeds: 9);
+    HospitalEntity _hospitalEntity = HospitalEntity(hospitalName: "Apollo Hospital",resourcesList: [Resource(2,"TotalBeds"),Resource(4,"ICU Beds")]);
+    HospitalEntity _hospitalEntity2 = HospitalEntity(hospitalName: "crazy Hospital",resourcesList: [Resource(2,"TotalBeds"),Resource(4,"ICU Beds")]);
     List<HospitalEntity> dummy = [_hospitalEntity,_hospitalEntity2];
     return Future.value(dummy);
   }
