@@ -1,10 +1,10 @@
+import 'package:entities/states.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/factory/view_model/bounce_ltr_view_factory.dart';
 import 'package:ui/navigation/navigation_service.dart';
 import 'package:ui/navigation/service_locator.dart';
 import 'package:ui/screens/dashboard_view.dart';
 import 'package:ui/services/navigation/routes.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:entities/hospital_entity.dart';
 
 class DashboardWidget extends StatefulWidget {
@@ -17,6 +17,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   final NavigationService _navigationService = locator<NavigationService>();
 
   String _selectedText;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -55,9 +56,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
           // ),
           _getSelectStateDropDown(),
           _getCityStateDropDown(),
-          _getHospitalDataList(),
-
-          
+          // _getHospitalDataList(),
         ],
       )),
     );
@@ -76,7 +75,9 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     return AppBar(
       title: Text("Health Stack"),
       leading: GestureDetector(
-        onTap: () {/* Write listener code here */},
+        onTap: () {
+          /* Write listener code here */
+        },
         child: Icon(
           Icons.menu, // add custom icons also
         ),
@@ -85,8 +86,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   }
 
   _getSelectStateDropDown() {
-    return StreamBuilder<List<String>>(
-        stream: _view.state.stateList.asBroadcastStream(),
+    return StreamBuilder<List<States>>(
+        stream: _view.state.stateList,
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return Padding(
@@ -97,14 +98,14 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                     borderRadius: BorderRadius.circular(7.0),
                     border: Border.all(color: Colors.blueGrey)),
                 padding: EdgeInsets.all(8),
-                child: DropdownButton<String>(
+                child: DropdownButton<States>(
                   value: _view.state.selectedState,
                   hint: Text("Select State"),
                   items: _getDropDownListItems(snapshot.data),
                   onChanged: (value) {
                     _view.selectedState(value);
                     setState(() {
-                      _selectedText = value;
+                      _selectedText = value.name;
                     });
                   },
                 ),
@@ -120,8 +121,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   }
 
   _getCityStateDropDown() {
-    return StreamBuilder<List<String>>(
-        stream: _view.state.cityList.asBroadcastStream(),
+    return StreamBuilder<List<Cities>>(
+        stream: _view.state.cityList,
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return Padding(
@@ -151,61 +152,59 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         });
   }
 
-  _getHospitalDataList() {
-    return StreamBuilder<List<HospitalEntity>>(
-        stream: _view.state.hospitalData.asBroadcastStream(),
-        builder: (context, AsyncSnapshot<List<HospitalEntity>> snapshot) {
-          if (snapshot.hasData) {
-            return Container(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(7.0),
-                        border: Border.all(color: Colors.blueGrey)),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Hospital Name"),
-                        Text("Total Beds"),
-                        Text("Available Beds"),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 200,
-                    child: ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(snapshot.data[index].hospitalName),
-                              Text(snapshot.data[index].resourcesList.first.countAvailable.toString()),
-                              Text(snapshot.data[index].resourcesList.last.countAvailable.toString()),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return Padding(
-              padding: const EdgeInsets.only(top:48.0,right: 24,left: 24),
-              //https://i.ibb.co/nmgXrZj/Pngtree-hand-drawn-protective-doctor-5325151.png
-              //https://i.ibb.co/SXZXVms/Pngtree-hand-drawn-protective-disinfection-5341263.png
-              child: Image.network("https://i.ibb.co/nmgXrZj/Pngtree-hand-drawn-protective-doctor-5325151.png"),
-            );
-          }
-        });
-  }
+// _getHospitalDataList() {
+//   return StreamBuilder<List<HospitalEntity>>(
+//       stream: _view.state.hospitalData.asBroadcastStream(),
+//       builder: (context, AsyncSnapshot<List<HospitalEntity>> snapshot) {
+//         if (snapshot.hasData) {
+//           return Container(
+//             padding: const EdgeInsets.all(24.0),
+//             child: Column(
+//               children: [
+//                 Container(
+//                   decoration: BoxDecoration(
+//                       borderRadius: BorderRadius.circular(7.0),
+//                       border: Border.all(color: Colors.blueGrey)),
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       Text("Hospital Name"),
+//                       Text("Total Beds"),
+//                       Text("Available Beds"),
+//                     ],
+//                   ),
+//                 ),
+//                 Container(
+//                   height: 200,
+//                   child: ListView.builder(
+//                     itemCount: snapshot.data.length,
+//                     itemBuilder: (context, index) {
+//                       return Container(
+//                         padding: const EdgeInsets.all(8.0),
+//                         child: Row(
+//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                           children: [
+//                             Text(snapshot.data[index].hospitalName),
+//                             Text(snapshot.data[index].resourcesList.first.countAvailable.toString()),
+//                             Text(snapshot.data[index].resourcesList.last.countAvailable.toString()),
+//                           ],
+//                         ),
+//                       );
+//                     },
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           );
+//         } else {
+//           return Padding(
+//             padding: const EdgeInsets.only(top:48.0,right: 24,left: 24),
+//             //https://i.ibb.co/nmgXrZj/Pngtree-hand-drawn-protective-doctor-5325151.png
+//             //https://i.ibb.co/SXZXVms/Pngtree-hand-drawn-protective-disinfection-5341263.png
+//             child: Image.network("https://i.ibb.co/nmgXrZj/Pngtree-hand-drawn-protective-doctor-5325151.png"),
+//           );
+//         }
+//       });
+// }
 }
-
-

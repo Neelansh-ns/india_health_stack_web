@@ -1,3 +1,4 @@
+import 'package:entities/states.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:ui/factory/core/base_view.dart';
 import 'package:ui/factory/core/base_view_out_state.dart';
@@ -28,13 +29,13 @@ class DashboardView
   }
 
   void onOpen() async {
-    state._stateList.add(await _getStateListUseCase.execute()) ;
+    state._stateList.addStream(_getStateListUseCase.execute());
   }
 
-   selectedState(String value) async{
+   selectedState(States value) async{
     print(value);
     state._selectedState.add(value);
-    state._cityList.add(await _getCityListUseCase.execute(1)) ;
+    state._cityList.add(value.list) ;
    }
 
   void selectedCity(String value) {
@@ -49,14 +50,16 @@ class DashboardView
 }
 
 class DashboardViewState extends BaseViewState {
-  BehaviorSubject<List<String>> _stateList = BehaviorSubject() ;
+  BehaviorSubject<List<States>> _stateList = BehaviorSubject() ;
+  Stream <List<States>>  get  stateList  =>  _stateList;
+
+  BehaviorSubject<List<Cities>> _cityList = BehaviorSubject() ;
+  Stream <List<Cities>>  get cityList => _cityList;
+
   BehaviorSubject<List<HospitalEntity>> _hospitalData = BehaviorSubject() ;
-  Stream <List<HospitalEntity>>  get  hospitalData  =>  _hospitalData;
-  BehaviorSubject<List<String>> _cityList = BehaviorSubject() ;
-  BehaviorSubject<String> _selectedState =  BehaviorSubject();
-  Stream <List<String>>  get cityList => _cityList;
- Stream <List<String>>  get stateList => _stateList;
-  String get selectedState => _selectedState.value;
+  BehaviorSubject<States> _selectedState =  BehaviorSubject();
+ // Stream <List<String>>  get stateList => _stateList;
+  States get selectedState => _selectedState.value;
 
   String  selectedCity ;
 }

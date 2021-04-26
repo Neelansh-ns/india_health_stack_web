@@ -6,6 +6,9 @@ import 'package:ui/factory/module/health_data_module.dart';
 import 'package:entities/maps_repo.dart';
 import 'package:remote_api/maps_api/maps_api.dart';
 import 'package:platform_web/platform_web_maps_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class IndiaHealthStackModule {
 //  static Alice alice;
   static bool enableOnScreenCrash = kReleaseMode ? false : true;
@@ -66,9 +69,9 @@ class IndiaHealthStackModule {
   IndiaHealthStackRepo indiaHealthStackRepo() {
     if (_indiaHealthStackRepo == null) {
       if (!enableMock) {
-        _indiaHealthStackRepo = IndiaHealthStackRepoImplementation(_mapsRemoteApi());
+        _indiaHealthStackRepo = IndiaHealthStackRepoImplementation(_mapsRemoteApi(),getFireStoreInstance(),);
       } else {
-        _indiaHealthStackRepo = IndiaHealthStackRepoImplementation(_mapsRemoteApi());
+        _indiaHealthStackRepo = IndiaHealthStackRepoImplementation(_mapsRemoteApi(),getFireStoreInstance(),);
       }
     }
     return _indiaHealthStackRepo;
@@ -80,6 +83,18 @@ class IndiaHealthStackModule {
     }
     return _mapsRepoInstance;
   }
+
+  fb.FirebaseAuth getFirebaseAuthInstance() {
+    return fb.FirebaseAuth.instance;
+  }
+
+  FirebaseFirestore getFireStoreInstance() {
+    return FirebaseFirestore.instance;
+  }
+
+  // Reference getFirebaseStorageInstance() {
+  //   return FirebaseStorage.instance.ref();
+  // }
 
   // AnalyticsHelperService _analyticsService() {
   //   if (_analyticsHelperService == null) {
