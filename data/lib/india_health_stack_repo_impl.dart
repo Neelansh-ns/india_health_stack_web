@@ -8,15 +8,13 @@ class IndiaHealthStackRepoImplementation extends IndiaHealthStackRepo {
   final MapsRemoteApi _mapsRemoteApi;
   final FirebaseFirestore _firebaseFirestore;
 
-  IndiaHealthStackRepoImplementation(
-      this._mapsRemoteApi, this._firebaseFirestore);
+  IndiaHealthStackRepoImplementation(this._mapsRemoteApi, this._firebaseFirestore);
 
   @override
   Future<String> getAddressFromLatLong({double lat, double long}) {
     print("ROope inside repo $lat, $long");
     return _mapsRemoteApi
-        .getAddressFromLatLong(
-            '$lat,$long', 'AIzaSyBoeXXcnqKiAzu4npSDAsZeP5FSeiA6LWY')
+        .getAddressFromLatLong('$lat,$long', 'AIzaSyBoeXXcnqKiAzu4npSDAsZeP5FSeiA6LWY')
         .then((value) {
       if (value.body["results"][0]["formatted_address"] != null) {
         return value.body["results"][0]["formatted_address"];
@@ -28,37 +26,48 @@ class IndiaHealthStackRepoImplementation extends IndiaHealthStackRepo {
 
   @override
   Stream<List<States>> getStateNamesList() async* {
-    QuerySnapshot snapshot =
-        await _firebaseFirestore.collection('states').get();
+    QuerySnapshot snapshot = await _firebaseFirestore.collection('states').get();
     yield snapshot.docs.map((e) {
       print((e.data()['cities']));
-      return States(
-          name: e.data()['name'], list: _getCities(e.data()['cities'] as List<dynamic>));
+      return States(name: e.data()['name'], list: _getCities(e.data()['cities'] as List<dynamic>));
     }).toList();
   }
 
   _getCities(List<dynamic> data) {
-    return data.map((e) => Cities(name: e.toString())).toList();
+    return data.map((e) => Cities(name: e['name'], id: e['id'])).toList();
   }
-
-  // Future<List<Cities>> getCityNamesList(String cityId)async {
-  //
-  //   DocumentSnapshot snapshot =
-  //       await _firebaseFirestore.collection('cities').doc(cityId).get();
-  //   return snapshot.data().entries.map((e) => Cities(name: e.value)).toList();
-  // }
 
   @override
-  Future<List<HospitalEntity>> getHospitalData(int index) {
-    HospitalEntity _hospitalEntity = HospitalEntity(
-        hospitalName: "Apollo Hospital",
-        resourcesList: [Resource(2, "TotalBeds"), Resource(4, "ICU Beds")]);
-    HospitalEntity _hospitalEntity2 = HospitalEntity(
-        hospitalName: "crazy Hospital",
-        resourcesList: [Resource(2, "TotalBeds"), Resource(4, "ICU Beds")]);
-    List<HospitalEntity> dummy = [_hospitalEntity, _hospitalEntity2];
-    return Future.value(dummy);
+  Future<List<HospitalEntity>> getHospitalData(int index) async {
+
+    QuerySnapshot snapshot = await _firebaseFirestore.collection('hospitals').get();
+    QuerySnapshot queryofdocs = await _firebaseFirestore.collection('resources').get();
+
+
+    return  snapshot.docs.map((e)  {
+      print(" Roope ${(e.data()['resources'])}");
+      if (e.data() != null && e.data()['cityId'] == index) {
+        return HospitalEntity(
+          uniqueID: e.data()['id'],
+          mapLink: e?.data()['mapLink'],
+          lastUpdatedTimestamp: e?.data()['lastUpdated'],
+          // resourcesList:  _getResourceList(e?.data()['resources'] as List<dynamic>,queryofdocs),
+          //resourcesList:_getResourceList(e?.data()['resources'] as DocumentReference),
+          hospitalName: e.data()['name'],
+          phoneNumber: e?.data()['contactNumber'] ?? "123456789",
+        );
+      }
+    }).toList();
+
   }
+
+  // _getResourceData(DocumentReference data) async* {
+  //   DocumentSnapshot snapshot =
+  //       await _firebaseFirestore.collection('resources').doc(data.path).get();
+  //   print(snapshot);
+  //   print(snapshot.data()['resId']);
+  //   yield snapshot.data()['resName'];
+  // }
 
 
 }

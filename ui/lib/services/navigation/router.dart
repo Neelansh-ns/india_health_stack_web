@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ui/screens/details_page/details_page_widget.dart';
 import 'package:ui/services/navigation/routes.dart';
 import 'package:entities/navigation/string_extentions.dart';
 import 'package:ui/set_map_location/set_location_on_map_widget.dart';
@@ -13,6 +14,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       var parameters = settings.arguments as Map<String, dynamic>;
       return MaterialPageRoute(
           builder: (context) => SetLocationOnMapWeb(null), settings: settings);
+    case Routes.detailsPage:
+      var parameters = settings.arguments as Map<String, dynamic>;
+      return MaterialPageRoute(
+          builder: (context) => DetailsPageWidget(parameters["uniqueID"]), settings: settings);
     // case Routes.IFrameScreen:
     //   var parameters = settings.arguments as Map<String, dynamic>;
     //   return MaterialPageRoute(

@@ -41,11 +41,11 @@ class DashboardView
   void selectedCity(Cities value) {
     state.selectedCity = value;
 
-    // _loadHospitalBasedOnSelectedCity(value);
+    _loadHospitalBasedOnSelectedCity(value.id);
   }
 
-   _loadHospitalBasedOnSelectedCity(String value) async{
-     state._hospitalData.add(await _getHospitalListUseCase.execute(1));
+   _loadHospitalBasedOnSelectedCity(int value) async{
+     state._hospitalData.add(await _getHospitalListUseCase.execute(value));
    }
 }
 
@@ -57,8 +57,10 @@ class DashboardViewState extends BaseViewState {
   Stream <List<Cities>>  get cityList => _cityList;
 
   BehaviorSubject<List<HospitalEntity>> _hospitalData = BehaviorSubject() ;
+  Stream <List<HospitalEntity>>  get hospitalData => _hospitalData;
+
   BehaviorSubject<States> _selectedState =  BehaviorSubject();
- // Stream <List<String>>  get stateList => _stateList;
+
   States get selectedState => _selectedState.value;
 
   Cities  selectedCity ;

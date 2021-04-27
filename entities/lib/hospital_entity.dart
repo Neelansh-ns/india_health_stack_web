@@ -1,6 +1,6 @@
 class HospitalEntity {
   String hospitalName;
-  String city;
+  int uniqueID;
   String pinCode;
   String mapLink;
   String phoneNumber;
@@ -11,15 +11,15 @@ class HospitalEntity {
       {this.hospitalName,
         this.lastUpdatedTimestamp,
         this.resourcesList,
-        this.city,
+        this.uniqueID,
         this.mapLink,
         this.pinCode,
         this.phoneNumber});
 }
 
 class Resource {
-  String resourceName;
+  var resourceName;
   int countAvailable;
-
-  Resource(this.countAvailable, this.resourceName);
+  String refID;
+  Resource({this.countAvailable, this.resourceName,this.refID});
 }
