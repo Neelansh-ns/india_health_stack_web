@@ -38,10 +38,10 @@ class DashboardView
     state._cityList.add(value.list) ;
    }
 
-  void selectedCity(String value) {
+  void selectedCity(Cities value) {
     state.selectedCity = value;
 
-    _loadHospitalBasedOnSelectedCity(value);
+    // _loadHospitalBasedOnSelectedCity(value);
   }
 
    _loadHospitalBasedOnSelectedCity(String value) async{
@@ -61,7 +61,7 @@ class DashboardViewState extends BaseViewState {
  // Stream <List<String>>  get stateList => _stateList;
   States get selectedState => _selectedState.value;
 
-  String  selectedCity ;
+  Cities  selectedCity ;
 }
 
 class DashboardViewOutState extends BaseViewOutState {}

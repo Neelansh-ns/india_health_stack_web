@@ -11,6 +11,10 @@ class GetStateListUseCase extends BaseUseCase<Stream<List<States>>, void> {
 
   @override
   Stream<List<States>> execute([void _dummy]) {
+
+    Stream<List<States>> dummy  = _indiaHealthStackRepo.getStateNamesList();
+    print(dummy.first);
+
     return _indiaHealthStackRepo.getStateNamesList();
   }
 }

@@ -33,8 +33,12 @@ class IndiaHealthStackRepoImplementation extends IndiaHealthStackRepo {
     yield snapshot.docs.map((e) {
       print((e.data()['cities']));
       return States(
-          name: e.data()['name'], list: e.data()['cities'] as List<Cities>);
+          name: e.data()['name'], list: _getCities(e.data()['cities'] as List<dynamic>));
     }).toList();
+  }
+
+  _getCities(List<dynamic> data) {
+    return data.map((e) => Cities(name: e.toString())).toList();
   }
 
   // Future<List<Cities>> getCityNamesList(String cityId)async {
@@ -55,4 +59,6 @@ class IndiaHealthStackRepoImplementation extends IndiaHealthStackRepo {
     List<HospitalEntity> dummy = [_hospitalEntity, _hospitalEntity2];
     return Future.value(dummy);
   }
+
+
 }
