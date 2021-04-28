@@ -27,7 +27,15 @@ class DashboardView extends BaseView<DashboardViewState, DashboardViewOutState> 
   }
 
   void onOpen() async {
+    refreshState();
     state._stateList.addStream(_getStateListUseCase.execute());
+  }
+
+  refreshState(){
+    state._selectedState.add(null);
+    state._selectedCity.add(null);
+    state._cityList.add(null);
+    state._hospitalData.add(null);
   }
 
   selectedState(States value) async {
@@ -37,8 +45,7 @@ class DashboardView extends BaseView<DashboardViewState, DashboardViewOutState> 
   }
 
   void selectedCity(Cities value) {
-    state.selectedCity = value;
-
+    state._selectedCity.add(value);
     _loadHospitalBasedOnSelectedCity(value.id);
   }
 
@@ -89,9 +96,15 @@ class DashboardViewState extends BaseViewState {
   Stream<List<HospitalEntity>> get hospitalData => _hospitalData;
 
   BehaviorSubject<States> _selectedState = BehaviorSubject();
+  Stream<States> get selectedState => _selectedState;
+  States get selectedStateValue => _selectedState.value;
 
-  States get selectedState => _selectedState.value;
-  Cities selectedCity;
+
+  BehaviorSubject<Cities> _selectedCity = BehaviorSubject();
+  Stream<Cities> get selectedCity => _selectedCity;
+  Cities get selectedCityValue => _selectedCity.value;
+
+  // Cities selectedCity;
   bool allBedsFlag = true;
   bool boFlag = false;
   bool bwoFlag = false;

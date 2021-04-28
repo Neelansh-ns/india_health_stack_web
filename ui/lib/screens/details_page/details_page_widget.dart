@@ -146,7 +146,7 @@ class _DetailsPageWidgetState extends State<DetailsPageWidget> {
                       padding: const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 24),
                       child: PrimaryButton(
                         onPressed: () {
-                          _navigationService.navigateTo(Routes.EntryRouteWidget);
+                          _navigationService.replaceCompleteRoute(Routes.EntryRouteWidget);
                         },
                         buttonText: "See Availability near by hospitals",
                       ),

@@ -19,11 +19,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   final DashboardView _view = ViewFactory().get<DashboardView>();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  String _selectedText;
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _view.onOpen();
   }
@@ -119,18 +116,19 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                     borderRadius: BorderRadius.circular(7.0),
                     border: Border.all(color: Color(0xFF6200EE))),
                 padding: EdgeInsets.all(4),
-                child: DropdownButton<States>(
-                  underline: SizedBox(),
-                  value: _view.state.selectedState != null ? _view.state.selectedState : null,
-                  hint: Text("Select State"),
-                  items: _getDropDownListItems(snapshot.data),
-                  onChanged: (value) {
-                    _view.selectedState(value);
-                    setState(() {
-                      _selectedText = value.name;
-                    });
-                  },
-                ),
+                child: StreamBuilder<States>(
+                    stream: _view.state.selectedState,
+                    builder: (context, selectedStateSnapshot) {
+                      return DropdownButton<States>(
+                        underline: SizedBox(),
+                        value: selectedStateSnapshot.data,
+                        hint: Text("Select State"),
+                        items: _getDropDownListItems(snapshot.data),
+                        onChanged: (value) {
+                          _view.selectedState(value);
+                        },
+                      );
+                    }),
               ),
             );
           } else {
@@ -156,18 +154,19 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(7.0),
                     border: Border.all(color: Color(0xFF6200EE))),
-                child: DropdownButton<Cities>(
-                  underline: SizedBox(),
-                  value: _view.state.selectedCity != null ? _view.state.selectedCity : null ,
-                  hint: Text("Select City"),
-                  items: _getDropDownCityListItems(snapshot.data),
-                  onChanged: (value) {
-                    _view.selectedCity(value);
-                    setState(() {
-                      _selectedText = value.name;
-                    });
-                  },
-                ),
+                child: StreamBuilder<Cities>(
+                    stream: _view.state.selectedCity,
+                    builder: (context, selectedCitySnapshot) {
+                      return DropdownButton<Cities>(
+                        underline: SizedBox(),
+                        value: selectedCitySnapshot.data,
+                        hint: Text("Select City"),
+                        items: _getDropDownCityListItems(snapshot.data),
+                        onChanged: (value) {
+                          _view.selectedCity(value);
+                        },
+                      );
+                    }),
               ),
             );
           } else {
@@ -181,7 +180,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
       padding: const EdgeInsets.only(top: 28.0, bottom: 14, left: 24),
       child: Text(
         title,
-        style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+        style: TextStyle(
+            color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
       ),
     );
   }
@@ -192,33 +192,32 @@ class _DashboardWidgetState extends State<DashboardWidget> {
       child: Column(
         children: [
           StreamBuilder<List<String>>(
-            stream: _view.state.refreshPills,
-            builder: (context, snapshot) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  PillButton(
-                    buttonText: "Oxygen Beds",
-                    onPressed: (value) {
-                      _view.sortBeds("bo",value);
-                    },
-                  ),
-                  PillButton(
-                    buttonText: "Non Oxygen Beds",
-                    onPressed: (value) {
-                      _view.sortBeds("bwo",value);
-                    },
-                  ),
-                  PillButton(
-                    buttonText: "ICU Beds",
-                    onPressed: (value) {
-                      _view.sortBeds("icu",value);
-                    },
-                  ),
-                ],
-              );
-            }
-          ),
+              stream: _view.state.refreshPills,
+              builder: (context, snapshot) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    PillButton(
+                      buttonText: "Oxygen Beds",
+                      onPressed: (value) {
+                        _view.sortBeds("bo", value);
+                      },
+                    ),
+                    PillButton(
+                      buttonText: "Non Oxygen Beds",
+                      onPressed: (value) {
+                        _view.sortBeds("bwo", value);
+                      },
+                    ),
+                    PillButton(
+                      buttonText: "ICU Beds",
+                      onPressed: (value) {
+                        _view.sortBeds("icu", value);
+                      },
+                    ),
+                  ],
+                );
+              }),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -250,18 +249,20 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 height: 200,
                 child: GridView.builder(
                   shrinkWrap: true,
+                  // physics: NeverScrollableScrollPhysics(),
                   itemCount: snapshot.data.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      childAspectRatio: MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height / 2),
+                      childAspectRatio: 1,
                       crossAxisCount: 2),
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
                         _navigationService.navigateTo(Routes.detailsPage,
-                            arguments: {"uniqueID": "${snapshot.data[index].uniqueID}"});
+                            arguments: {
+                              "uniqueID": "${snapshot.data[index].uniqueID}"
+                            });
                       },
                       child: Container(
                         height: 140,
@@ -283,21 +284,24 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                               height: 18,
                             ),
                             StreamBuilder<List<String>>(
-                              stream: _view.state.refreshPills,
-                              builder: (context, refreshBool) {
-                                print("called stream builder ${refreshBool.data}");
+                                stream: _view.state.refreshPills,
+                                builder: (context, refreshBool) {
+                                  print(
+                                      "called stream builder ${refreshBool.data}");
                                   return Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: _getAvailabilityItems(snapshot.data[index].resourcesList,refreshBool.data)
-                                  );
-                              }
-                            ),
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: _getAvailabilityItems(
+                                          snapshot.data[index].resourcesList,
+                                          refreshBool.data));
+                                }),
                           ],
                         ),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.25),
                           borderRadius: BorderRadius.circular(2.0),
-                          border: Border.all(color: Colors.black.withOpacity(0.20)),
+                          border:
+                              Border.all(color: Colors.black.withOpacity(0.20)),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey,
@@ -345,14 +349,13 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     );
   }
 
-  _getAvailabilityItems(List<Resource> data,List<String> refresh) {
-
+  _getAvailabilityItems(List<Resource> data, List<String> refresh) {
     print(" refresh status $refresh");
 
     return data.map((e) {
-      if(!refresh.contains("all") && refresh.contains(e.refID)){
+      if (!refresh.contains("all") && refresh.contains(e.refID)) {
         return Padding(
-          padding: const EdgeInsets.only(bottom:8.0),
+          padding: const EdgeInsets.only(bottom: 8.0),
           child: Text(
             "${e.resourceName} - ${e.countAvailable}",
             style: TextStyle(
@@ -362,9 +365,9 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 height: 1.5),
           ),
         );
-      }else{
+      } else {
         return Padding(
-          padding: const EdgeInsets.only(bottom:8.0),
+          padding: const EdgeInsets.only(bottom: 8.0),
           child: Text(
             "${e.resourceName} - ${e.countAvailable}",
             style: TextStyle(
@@ -376,7 +379,5 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         );
       }
     }).toList();
-
-
   }
 }
