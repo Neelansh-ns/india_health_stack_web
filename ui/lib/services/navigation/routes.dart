@@ -13,6 +13,7 @@ class Routes {
   static const String CancellationReasons = '/cancellation-reasons';
   static const String orderSummary = '/order-summary';
   static const String selectLocation = '/select-location';
+  static const String detailsPage = '/detailsPage';
   static const String IFrameScreen = '/iFrame';
   static const String ContentPage = '/content-page';
 }

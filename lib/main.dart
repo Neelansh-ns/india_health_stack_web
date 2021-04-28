@@ -6,14 +6,16 @@ import 'package:ui/navigation/navigation_service.dart';
 import 'package:ui/navigation/service_locator.dart';
 import 'package:ui/services/navigation/router.dart';
 import 'package:ui/services/navigation/routes.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:url_strategy/url_strategy.dart';
+
 void main() async {
   print('INIT MAIN');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   print('INIT MAIN after ensureInitialized');
+  setPathUrlStrategy();
   runApp(IndiaHealthStackApp());
-
-
   setUpServices();
   IndiaHealthStackModule();
   await ViewFactory().initialise();
@@ -22,29 +24,31 @@ void main() async {
 class IndiaHealthStackApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "India Health Stack",
-      builder: (context, child) => IndiaHealthStackThemeWrapper(
-        child: child,
-      ),
-      navigatorObservers: [routeObserver],
-      navigatorKey: locator<NavigationService>().navigatorKey,
-      onGenerateRoute: generateRoute,
-      onUnknownRoute: (settings) => MaterialPageRoute(
-          builder: (context) => Scaffold(
-            backgroundColor: Colors.black12,
-            body: Center(
-                child: Container(
-                  child: Text('Are you lost!!'),
-                )),
-          ),
-          settings: settings),
+    return OKToast(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "India Health Stack",
+        builder: (context, child) => IndiaHealthStackThemeWrapper(
+          child: child,
+        ),
+        navigatorObservers: [routeObserver],
+        navigatorKey: locator<NavigationService>().navigatorKey,
+        onGenerateRoute: generateRoute,
+        onUnknownRoute: (settings) => MaterialPageRoute(
+            builder: (context) => Scaffold(
+              backgroundColor: Colors.black12,
+              body: Center(
+                  child: Container(
+                    child: Text('Are you lost!!'),
+                  )),
+            ),
+            settings: settings),
 //      routes: {
 //        '/homee': (context) => HomePage(),
 //      },
-      initialRoute: Routes.EntryRouteWidget,
+        initialRoute: Routes.EntryRouteWidget,
 //      home: EntryRouteWidget(),
+      ),
     );
   }
 }

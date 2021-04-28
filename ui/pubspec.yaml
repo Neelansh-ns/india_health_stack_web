@@ -27,6 +27,8 @@ dependencies:
     sdk: flutter
   chopper: ^3.0.1+1
   google_maps: ^3.4.4
+  url_launcher: ^6.0.3
+  oktoast: ^3.0.0
 
 dev_dependencies:
   flutter_test:

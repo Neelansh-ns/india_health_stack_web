@@ -6,11 +6,22 @@ import 'package:ui/factory/module/health_data_module.dart';
 import 'package:entities/maps_repo.dart';
 import 'package:remote_api/maps_api/maps_api.dart';
 import 'package:platform_web/platform_web_maps_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class IndiaHealthStackModule {
 //  static Alice alice;
   static bool enableOnScreenCrash = kReleaseMode ? false : true;
   static IndiaHealthStackModule _instance;
+  // LTRRepo _ltrRepoInstance;
+  // UserRepo _userRepoInstance;
+  // GatewayRepo _gatewayRepoInstance;
   MapsRepo _mapsRepoInstance;
+  // AnalyticsHelperService _analyticsHelperService;
+  // PlatformRepo _platformRepoInstance;
+  // PhonePeRemoteApi _phonePeRemoteApiInstance;
+  // BounceLtrPaymentsRemoteApi _ltrRemotePaymentApiInstance;
+  // BounceLtrRemoteApi _ltrRemoteApiInstance;
   MapsRemoteApi _mapsRemoteApiInstance;
   // ErrorRepo _errorRepoInstance;
 
@@ -44,23 +55,23 @@ class IndiaHealthStackModule {
     return _healthDataModule;
   }
 
-  MapModule _mapModuleInstance;
+  MapModule _bounceMapModuleInstance;
 
   MapModule mapModule() {
-    if (_mapModuleInstance == null) {
-      _mapModuleInstance = MapModule(
+    if (_bounceMapModuleInstance == null) {
+      _bounceMapModuleInstance = MapModule(
         _mapsRepo(),
       );
     }
-    return _mapModuleInstance;
+    return _bounceMapModuleInstance;
   }
 
   IndiaHealthStackRepo indiaHealthStackRepo() {
     if (_indiaHealthStackRepo == null) {
       if (!enableMock) {
-        _indiaHealthStackRepo = IndiaHealthStackRepoImplementation(_mapsRemoteApi());
+        _indiaHealthStackRepo = IndiaHealthStackRepoImplementation(_mapsRemoteApi(),getFireStoreInstance(),);
       } else {
-        _indiaHealthStackRepo = IndiaHealthStackRepoImplementation(_mapsRemoteApi());
+        _indiaHealthStackRepo = IndiaHealthStackRepoImplementation(_mapsRemoteApi(),getFireStoreInstance(),);
       }
     }
     return _indiaHealthStackRepo;
@@ -72,6 +83,39 @@ class IndiaHealthStackModule {
     }
     return _mapsRepoInstance;
   }
+
+  fb.FirebaseAuth getFirebaseAuthInstance() {
+    return fb.FirebaseAuth.instance;
+  }
+
+  FirebaseFirestore getFireStoreInstance() {
+    return FirebaseFirestore.instance;
+  }
+
+  // Reference getFirebaseStorageInstance() {
+  //   return FirebaseStorage.instance.ref();
+  // }
+
+  // AnalyticsHelperService _analyticsService() {
+  //   if (_analyticsHelperService == null) {
+  //     _analyticsHelperService = CleverTapService();
+  //   }
+  //   return _analyticsHelperService;
+  // }
+
+  // PlatformRepo _platformRepo() {
+  //   if (_platformRepoInstance == null) {
+  //     _platformRepoInstance = WebPlatformRepo();
+  //   }
+  //   return _platformRepoInstance;
+  // }
+
+  // ErrorRepo _errorRepo() {
+  //   if (_errorRepoInstance == null) {
+  //     _errorRepoInstance = BounceErrorRepo();
+  //   }
+  //   return _errorRepoInstance;
+  // }
 
   MapsRemoteApi _mapsRemoteApi() {
     if (_mapsRemoteApiInstance == null) {

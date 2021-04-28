@@ -2,6 +2,7 @@ import 'package:ui/factory/core/base_view.dart';
 import 'package:ui/factory/module/india_healthstack_module.dart';
 import 'package:ui/map/india_health_stack_map_view.dart';
 import 'package:ui/screens/dashboard_view.dart';
+import 'package:ui/screens/details_page/details_page_view.dart';
 import 'package:ui/set_map_location/set_location_map_view.dart';
 
 class ViewFactory {
@@ -37,6 +38,8 @@ class ViewFactory {
       case IndiaHealthStackMapView: return _app.mapModule().getMapNewView();
       case DashboardView:
         return _app.healthDataModule().dashBoardView();
+      case DetailsPageView:
+        return _app.healthDataModule().detailsPageView();
       case SetLocationOnMapView:
         return _app.healthDataModule().getSetLocationOnMapView();
       default:
