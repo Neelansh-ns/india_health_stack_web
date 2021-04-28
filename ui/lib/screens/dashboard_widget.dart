@@ -5,7 +5,7 @@ import 'package:entities/states.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:ui/common/pill_button.dart';
-import 'package:ui/factory/view_model/bounce_ltr_view_factory.dart';
+import 'package:ui/factory/view_model/india_health_stack_view_factory.dart';
 import 'package:ui/navigation/navigation_service.dart';
 import 'package:ui/navigation/service_locator.dart';
 import 'package:ui/screens/dashboard_view.dart';

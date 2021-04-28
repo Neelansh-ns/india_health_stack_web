@@ -16,13 +16,6 @@ class Routes {
   static const String detailsPage = '/detailsPage';
   static const String IFrameScreen = '/iFrame';
   static const String ContentPage = '/content-page';
-  static const List<String> AllowedInAppDomains = ['phonepe-stage.bounceshare.com','flutter-aar.s3.ap-south-1.amazonaws.com','bounce-ltr-web-stage.s3.ap-south-1.amazonaws.com'];
-
-}
-
-class CommonRedirectUrl{
-  static const String FAQsPage = 'https://bounceshare.com/bounce-monthly-rentals';
-  static const String UsedScooterPage = 'https://bounceshare.com/shop';
 }
 
 dynamic value([dynamic value]) {

@@ -5,12 +5,12 @@ import 'package:rxdart/rxdart.dart';
 import 'package:ui/factory/core/base_view.dart';
 import 'package:ui/factory/core/base_view_out_state.dart';
 import 'package:ui/factory/core/base_view_state.dart';
-import 'package:ui/factory/view_model/bounce_ltr_view_factory.dart';
-import 'package:ui/map/bounce_map_new_view.dart';
+import 'package:ui/factory/view_model/india_health_stack_view_factory.dart';
+import 'package:ui/map/india_health_stack_map_view.dart';
 import 'package:use_case/maps_location/get_adress_from_lat_long_usecase.dart';
 
 class SetLocationOnMapView extends BaseView<SetLocationOnMapState, BaseViewOutState> {
-  final BounceMapNewView _bounceMapView = ViewFactory().get<BounceMapNewView>();
+  final IndiaHealthStackMapView _indiaHealthStackMapView = ViewFactory().get<IndiaHealthStackMapView>();
   GetAddressFromLatLongUseCase _getAddressFromLatLongUseCase;
 
   SetLocationOnMapView(this._getAddressFromLatLongUseCase);
@@ -21,9 +21,9 @@ class SetLocationOnMapView extends BaseView<SetLocationOnMapState, BaseViewOutSt
   }
 
   onOpen(List<List<LatLng>> polygonPoints) {
-    _bounceMapView.init(polygonPoints, LatLng(12.932117, 77.580824));
-    state._subscription = _bounceMapView.state.cameraTarget.listen((latLng) async {
-//      print('serviceAreaPolyLinesList:  ${_bounceMapView.state.serviceAreaPolyLinesList}');
+    _indiaHealthStackMapView.init(polygonPoints, LatLng(12.932117, 77.580824));
+    state._subscription = _indiaHealthStackMapView.state.cameraTarget.listen((latLng) async {
+//      print('serviceAreaPolyLinesList:  ${_indiaHealthStackMapView.state.serviceAreaPolyLinesList}');
       if (latLng == null) {
         state._isMapIdle.add(false);
         state._currentAddress.add('');
@@ -42,7 +42,7 @@ class SetLocationOnMapView extends BaseView<SetLocationOnMapState, BaseViewOutSt
       }
     });
 
-    _bounceMapView.state.isMapIdle.listen((event) {
+    _indiaHealthStackMapView.state.isMapIdle.listen((event) {
       print('map $event');
       state._isMapIdle.add(event);
     });

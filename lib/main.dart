@@ -1,6 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/factory/module/india_healthstack_module.dart';
-import 'package:ui/factory/view_model/bounce_ltr_view_factory.dart';
+import 'package:ui/factory/view_model/india_health_stack_view_factory.dart';
 import 'package:ui/navigation/navigation_service.dart';
 import 'package:ui/navigation/service_locator.dart';
 import 'package:ui/services/navigation/router.dart';
@@ -11,6 +12,7 @@ import 'package:url_strategy/url_strategy.dart';
 void main() async {
   print('INIT MAIN');
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   print('INIT MAIN after ensureInitialized');
   setPathUrlStrategy();
   runApp(IndiaHealthStackApp());
@@ -26,7 +28,7 @@ class IndiaHealthStackApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "India Health Stack",
-        builder: (context, child) => BounceThemeWrapper(
+        builder: (context, child) => IndiaHealthStackThemeWrapper(
           child: child,
         ),
         navigatorObservers: [routeObserver],
@@ -51,16 +53,16 @@ class IndiaHealthStackApp extends StatelessWidget {
   }
 }
 
-class BounceThemeWrapper extends StatefulWidget {
+class IndiaHealthStackThemeWrapper extends StatefulWidget {
   final Widget child;
 
-  BounceThemeWrapper({@required this.child});
+  IndiaHealthStackThemeWrapper({@required this.child});
 
   @override
-  _BounceThemeWrapperState createState() => _BounceThemeWrapperState();
+  _IndiaHealthStackThemeWrapperState createState() => _IndiaHealthStackThemeWrapperState();
 }
 
-class _BounceThemeWrapperState extends State<BounceThemeWrapper> {
+class _IndiaHealthStackThemeWrapperState extends State<IndiaHealthStackThemeWrapper> {
 
   @override
   void didChangeDependencies() {
@@ -72,7 +74,7 @@ class _BounceThemeWrapperState extends State<BounceThemeWrapper> {
     print('INIT MAIN in EntryRouteWidget');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Bounce LTR",
+      title: "India Health Stack",
 //      navigatorKey: locator<NavigationService>().navigatorKey,
 //      onGenerateRoute: generateRoute,
       theme: ThemeData(

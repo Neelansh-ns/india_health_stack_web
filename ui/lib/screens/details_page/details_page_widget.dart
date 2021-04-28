@@ -1,7 +1,7 @@
 import 'package:entities/hospital_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/common/primary_button.dart';
-import 'package:ui/factory/view_model/bounce_ltr_view_factory.dart';
+import 'package:ui/factory/view_model/india_health_stack_view_factory.dart';
 import 'package:ui/navigation/navigation_service.dart';
 import 'package:ui/navigation/service_locator.dart';
 import 'package:ui/screens/details_page/details_page_view.dart';

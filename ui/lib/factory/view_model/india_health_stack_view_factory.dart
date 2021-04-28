@@ -1,6 +1,6 @@
 import 'package:ui/factory/core/base_view.dart';
 import 'package:ui/factory/module/india_healthstack_module.dart';
-import 'package:ui/map/bounce_map_new_view.dart';
+import 'package:ui/map/india_health_stack_map_view.dart';
 import 'package:ui/screens/dashboard_view.dart';
 import 'package:ui/screens/details_page/details_page_view.dart';
 import 'package:ui/set_map_location/set_location_map_view.dart';
@@ -35,7 +35,7 @@ class ViewFactory {
 
   BaseView _get<T>() {
     switch (T) {
-      case BounceMapNewView: return _app.mapModule().getMapNewView();
+      case IndiaHealthStackMapView: return _app.mapModule().getMapNewView();
       case DashboardView:
         return _app.healthDataModule().dashBoardView();
       case DetailsPageView:

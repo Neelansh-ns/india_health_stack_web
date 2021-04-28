@@ -3,8 +3,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:google_maps/google_maps.dart';
-import 'package:ui/factory/view_model/bounce_ltr_view_factory.dart';
-import 'package:ui/map/bounce_map_new_view.dart';
+import 'package:ui/factory/view_model/india_health_stack_view_factory.dart';
+import 'package:ui/map/india_health_stack_map_view.dart';
 import 'package:ui/map/map_style_guide.dart';
 
 class MapNewWidget extends StatefulWidget {
@@ -13,7 +13,7 @@ class MapNewWidget extends StatefulWidget {
 }
 
 class _MapNewWidgetState extends State<MapNewWidget> {
-  BounceMapNewView _bounceMapNewView = ViewFactory().get<BounceMapNewView>();
+  IndiaHealthStackMapView _indiaHealthStackMapView = ViewFactory().get<IndiaHealthStackMapView>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class _MapNewWidgetState extends State<MapNewWidget> {
     String htmlId = UniqueKey().toString();
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(htmlId, (int viewId) {
-      final initialLatLng = _bounceMapNewView.state?.userLatLng ?? LatLng(12.916887, 77.598630);
+      final initialLatLng = _indiaHealthStackMapView.state?.userLatLng ?? LatLng(12.916887, 77.598630);
 
       final mapOptions = MapOptions()
         ..zoom = 15.2
@@ -49,14 +49,14 @@ class _MapNewWidgetState extends State<MapNewWidget> {
 //        ..position = initialLatLng
 //        ..map = map
 //        ..title = 'Hello World!');
-      _bounceMapNewView.state.serviceAreaSet.forEach((polyGon) {
+      _indiaHealthStackMapView.state.serviceAreaSet.forEach((polyGon) {
         polyGon..map = map;
       });
 
       map
         ..addListener('idle', () {
           var center = map.get('center');
-          _bounceMapNewView.mapJsObjectToLatLng(center);
+          _indiaHealthStackMapView.mapJsObjectToLatLng(center);
 //      print(e.runtimeType);
 //      var t= js.context['JSON'].callMethod('stringify',[e]);
 //      print(t);
@@ -64,10 +64,10 @@ class _MapNewWidgetState extends State<MapNewWidget> {
         });
       Stream<dynamic> s = map.onBoundsChanged;
       s.listen((event) {
-        _bounceMapNewView.updateCameraTargetOnMove(null);
-        _bounceMapNewView.onCameraMove();
+        _indiaHealthStackMapView.updateCameraTargetOnMove(null);
+        _indiaHealthStackMapView.onCameraMove();
       });
-      _bounceMapNewView.state.moveToCurrentLocation.listen((shouldMove) {
+      _indiaHealthStackMapView.state.moveToCurrentLocation.listen((shouldMove) {
         if (shouldMove) {
           map..panTo(initialLatLng);
         }

@@ -1,8 +1,8 @@
 import 'package:entities/lat_lng.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/common/primary_button.dart';
-import 'package:ui/factory/view_model/bounce_ltr_view_factory.dart';
-import 'package:ui/map/bounce_map_new_view.dart';
+import 'package:ui/factory/view_model/india_health_stack_view_factory.dart';
+import 'package:ui/map/india_health_stack_map_view.dart';
 import 'package:ui/map/map_new.dart';
 import 'package:ui/map/polygon_lat_lng.dart.dart';
 import 'package:ui/navigation/navigation_service.dart';
@@ -21,8 +21,8 @@ class SetLocationOnMapWeb extends StatefulWidget {
 class _SetLocationOnMapWebState extends State<SetLocationOnMapWeb> {
   final SetLocationOnMapView _setLocationOnMapView =
       ViewFactory().get<SetLocationOnMapView>();
-  final BounceMapNewView _bounceMapNewView =
-      ViewFactory().get<BounceMapNewView>();
+  final IndiaHealthStackMapView _indiaHealthStackMapView =
+      ViewFactory().get<IndiaHealthStackMapView>();
   final NavigationService _navigationService = locator<NavigationService>();
 
   get pin => IgnorePointer(
@@ -106,7 +106,7 @@ class _SetLocationOnMapWebState extends State<SetLocationOnMapWeb> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          _bounceMapNewView.moveToCurrentLocation();
+                          _indiaHealthStackMapView.moveToCurrentLocation();
                         },
                         child: Container(
                           height: 40,
