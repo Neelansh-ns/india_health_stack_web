@@ -121,7 +121,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 padding: EdgeInsets.all(4),
                 child: DropdownButton<States>(
                   underline: SizedBox(),
-                  value: _view.state.selectedState,
+                  value: _view.state.selectedState != null ? _view.state.selectedState : null,
                   hint: Text("Select State"),
                   items: _getDropDownListItems(snapshot.data),
                   onChanged: (value) {
@@ -158,7 +158,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                     border: Border.all(color: Color(0xFF6200EE))),
                 child: DropdownButton<Cities>(
                   underline: SizedBox(),
-                  value: _view.state.selectedCity,
+                  value: _view.state.selectedCity != null ? _view.state.selectedCity : null ,
                   hint: Text("Select City"),
                   items: _getDropDownCityListItems(snapshot.data),
                   onChanged: (value) {

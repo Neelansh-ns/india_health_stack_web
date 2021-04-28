@@ -7,4 +7,6 @@ abstract class IndiaHealthStackRepo {
   Stream<List<States>> getStateNamesList();
 
   Future<List<HospitalEntity>> getHospitalData(int index);
+  Future<HospitalEntity> getHospitalDetails(int index);
+  Future<List<HospitalEntity>> getResourceData(String docPath);
 }

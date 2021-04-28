@@ -31,8 +31,8 @@ class PrimaryButton extends StatelessWidget {
         onTap: (isLoading || !isActive) ? null : onPressed,
         child: Container(
             decoration: BoxDecoration(
-                color: isActive ? Color(0xffff4c5a) : Color(0xffb0b0b0),
-                borderRadius: BorderRadius.circular(cornerRadius ?? 24)),
+                color: isActive ? Color(0xFF6200EE) : Color(0xffb0b0b0),
+                borderRadius: BorderRadius.circular(cornerRadius ?? 2)),
             height: 48,
             alignment: Alignment.center,
             width: MediaQuery.of(context).size.width,

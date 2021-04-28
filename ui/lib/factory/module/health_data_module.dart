@@ -9,6 +9,7 @@ import 'package:ui/set_map_location/set_location_map_view.dart';
 import 'package:use_case/maps_location/get_state_list_usecase.dart';
 import 'package:use_case/maps_location/get_city_list_usecase.dart';
 import 'package:use_case/maps_location/get_hospital_data_list.dart';
+import 'package:use_case/maps_location/get_hospital_details_usecase.dart';
 class HealthDataModule {
   IndiaHealthStackRepo _indiaHealthStackRepo;
 
@@ -25,6 +26,6 @@ class HealthDataModule {
   }
 
   BaseView<BaseViewState, BaseViewOutState> detailsPageView() {
-    return DetailsPageView();
+    return DetailsPageView(GetHospitalDetailsUseCase(_indiaHealthStackRepo));
   }
 }
