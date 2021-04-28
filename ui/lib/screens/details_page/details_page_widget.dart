@@ -9,7 +9,7 @@ import 'package:ui/services/navigation/routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailsPageWidget extends StatefulWidget {
-  String uniqueID;
+  final String uniqueID;
 
   DetailsPageWidget(this.uniqueID);
 
@@ -35,7 +35,7 @@ class _DetailsPageWidgetState extends State<DetailsPageWidget> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            _navigationService.navigateTo(Routes.EntryRouteWidget);
+            _navigationService.goBack();
           },
           icon: Icon(
             Icons.arrow_back,

@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import 'package:entities/hospital_entity.dart';
 import 'package:entities/states.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
@@ -9,7 +10,6 @@ import 'package:ui/navigation/navigation_service.dart';
 import 'package:ui/navigation/service_locator.dart';
 import 'package:ui/screens/dashboard_view.dart';
 import 'package:ui/services/navigation/routes.dart';
-import 'package:entities/hospital_entity.dart';
 
 class DashboardWidget extends StatefulWidget {
   @override
@@ -133,10 +133,13 @@ class _DashboardWidgetState extends State<DashboardWidget> {
               ),
             );
           } else {
-            return DropdownMenuItem<String>(
-              value: "Select State",
-              child: new Text("Select State"),
-            );
+            return Center(
+                child: SizedBox(
+                    height: 16,
+                    width: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    )));
           }
         });
   }
@@ -165,6 +168,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                         items: _getDropDownCityListItems(snapshot.data),
                         onChanged: (value) {
                           _view.selectedCity(value);
+                          _view.updateLoadingState(true);
                         },
                       );
                     }),
@@ -181,7 +185,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
       padding: const EdgeInsets.only(top: 28.0, bottom: 14, left: 24),
       child: Text(
         title,
-        style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+        style: TextStyle(
+            color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -245,68 +250,118 @@ class _DashboardWidgetState extends State<DashboardWidget> {
           stream: _view.state.hospitalData.asBroadcastStream(),
           builder: (context, AsyncSnapshot<List<HospitalEntity>> snapshot) {
             if (snapshot.hasData && snapshot?.data?.first != null) {
-              return Container(
-                height: 200,
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  // physics: NeverScrollableScrollPhysics(),
-                  itemCount: snapshot.data.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height / 2),
-                      crossAxisCount: 2),
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        _navigationService.navigateTo(Routes.detailsPage,
-                            arguments: {"uniqueID": "${snapshot.data[index].uniqueID}"});
-                      },
-                      child: Container(
-                        height: 140,
-                        width: (MediaQuery.of(context).size.width - 60) / 2,
-                        padding: EdgeInsets.all(4.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              return LayoutBuilder(
+                builder: (context, constraints) => ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: (snapshot.data.length / 2).floor(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text(
-                              snapshot.data[index].hospitalName,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  color: Colors.white,
-                                  height: 1.5),
+                            GestureDetector(
+                              onTap: () {
+                                _navigationService
+                                    .navigateTo(Routes.detailsPage, arguments: {
+                                  "uniqueID": "${snapshot.data[index].uniqueID}"
+                                });
+                              },
+                              child: Container(
+                                height: 240,
+                                width: constraints.maxWidth > 1250 ? 600 : 200,
+                                // constraints: BoxConstraints(maxWidth: 400,minWidth: 200),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(24.0),
+                                ),
+                                child: SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(24.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          snapshot.data[index].hospitalName,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.black,
+                                              height: 1.5),
+                                        ),
+                                        SizedBox(
+                                          height: 18,
+                                        ),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: _getAvailabilityItems(
+                                              snapshot
+                                                  .data[index].resourcesList,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                            SizedBox(
-                              height: 18,
-                            ),
-                            Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: _getAvailabilityItems(
-                                  snapshot.data[index].resourcesList,
-                                ))
+                            if (snapshot.data.length % 2 == 0)
+                              GestureDetector(
+                                onTap: () {
+                                  _navigationService.navigateTo(
+                                      Routes.detailsPage,
+                                      arguments: {
+                                        "uniqueID":
+                                            "${snapshot.data[index + 1].uniqueID}"
+                                      });
+                                },
+                                child: Container(
+                                  height: 240,
+                                  width:
+                                      constraints.maxWidth > 1250 ? 600 : 200,
+                                  // constraints: BoxConstraints(maxWidth: 400,minWidth: 200),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(24.0),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(24.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            snapshot
+                                                .data[index + 1].hospitalName,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                height: 1.5),
+                                          ),
+                                          SizedBox(
+                                            height: 18,
+                                          ),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: _getAvailabilityItems(
+                                                snapshot.data[index + 1]
+                                                    .resourcesList,
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                           ],
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.25),
-                          borderRadius: BorderRadius.circular(2.0),
-                          border: Border.all(color: Colors.black.withOpacity(0.20)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 6.0,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                        )),
               );
-            } else {
+            } else if (_view.state.selectedStateValue == null) {
               return Padding(
                 padding: const EdgeInsets.only(top: 48.0, right: 24, left: 24),
                 //https://i.ibb.co/nmgXrZj/Pngtree-hand-drawn-protective-doctor-5325151.png
@@ -314,7 +369,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 child: Image.network(
                     "https://i.ibb.co/nmgXrZj/Pngtree-hand-drawn-protective-doctor-5325151.png"),
               );
-            }
+            } else
+              return Center(child: CircularProgressIndicator());
           }),
     );
   }
@@ -323,7 +379,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     return GestureDetector(
       onTap: () {
         showToast("Location not supported by browser",
-            backgroundColor: Colors.grey, animationDuration: Duration(milliseconds: 10));
+            backgroundColor: Colors.grey,
+            animationDuration: Duration(milliseconds: 10));
       },
       child: Padding(
         padding: const EdgeInsets.only(right: 24.0, left: 24, top: 18),
@@ -353,7 +410,10 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         child: Text(
           "${e.resourceName} - ${e.countAvailable}",
           style: TextStyle(
-              fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white, height: 1.5),
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              color: Colors.black,
+              height: 1.5),
         ),
       );
     }).toList();

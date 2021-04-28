@@ -21,10 +21,15 @@ DetailsPageView(this._getHospitalDetailsUseCase);
   }
 
    onOpen( String index) {
+    refreshStates();
     _getHospitalDetailsUseCase.execute(int.parse(index)).then((value) {
       state.hospitalData.add(value);
     });
    }
+
+  void refreshStates() {
+    state.hospitalData.add(null);
+  }
 }
 class DetailsPageViewState extends BaseViewState {
   BehaviorSubject<HospitalEntity> hospitalData = BehaviorSubject() ;

@@ -34,6 +34,7 @@ dependencies:
   utils:
     path: ./utils
   rxdart: any
+  url_strategy: ^0.2.0
   flutter:
     sdk: flutter
 

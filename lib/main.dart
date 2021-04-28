@@ -6,14 +6,14 @@ import 'package:ui/navigation/service_locator.dart';
 import 'package:ui/services/navigation/router.dart';
 import 'package:ui/services/navigation/routes.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
   print('INIT MAIN');
   WidgetsFlutterBinding.ensureInitialized();
   print('INIT MAIN after ensureInitialized');
+  setPathUrlStrategy();
   runApp(IndiaHealthStackApp());
-
-
   setUpServices();
   IndiaHealthStackModule();
   await ViewFactory().initialise();
