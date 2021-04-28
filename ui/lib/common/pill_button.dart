@@ -22,13 +22,12 @@ class _PillButtonState extends State<PillButton> {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: (){
-        widget.onPressed();
       setState(() {
         active = !active;
       });
+      widget.onPressed(active);
       },
       child: Container(
         decoration: BoxDecoration(

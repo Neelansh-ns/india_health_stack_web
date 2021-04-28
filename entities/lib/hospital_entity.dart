@@ -21,5 +21,6 @@ class Resource {
   var resourceName;
   int countAvailable;
   String refID;
-  Resource({this.countAvailable, this.resourceName,this.refID});
+  String resIcon;
+  Resource({this.countAvailable, this.resourceName,this.refID,this.resIcon});
 }

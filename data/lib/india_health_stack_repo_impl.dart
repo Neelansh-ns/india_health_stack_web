@@ -43,37 +43,62 @@ class IndiaHealthStackRepoImplementation extends IndiaHealthStackRepo {
         await _firebaseFirestore.collection('hospitals').where("cityId", isEqualTo: index).get();
     QuerySnapshot queryofdocs = await _firebaseFirestore.collection('resources').get();
 
+    List<HospitalEntity> hospitalEntity = List();
     if (snapshot.docs.isNotEmpty) {
-      return snapshot.docs.map((e) {
+      await Future.forEach(snapshot.docs, (e) async {
+        // await snapshot.docs.forEach((e) async{
         print(" Roope ${(e.data()['resources'])}");
-          return HospitalEntity(
-            uniqueID: e.data()['id'],
-            mapLink: e?.data()['mapLink'],
-            lastUpdatedTimestamp: e?.data()['lastUpdated'],
-            // resourcesList:  _getResourceList(e?.data()['resources'] as List<dynamic>,queryofdocs),
-            //resourcesList:_getResourceList(e?.data()['resources'] as DocumentReference),
-            hospitalName: e.data()['name'],
-            phoneNumber: e?.data()['contactNumber'] ?? "123456789",
-          );
-      }).toList();
+
+        List<Resource> resources = await _getResourceList(e?.data()['resources'] as List<dynamic>);
+
+        hospitalEntity.add(HospitalEntity(
+          uniqueID: e.data()['id'],
+          mapLink: e?.data()['mapLink'],
+          lastUpdatedTimestamp: e?.data()['lastUpdated'],
+          pinCode: e?.data()['pincode'],
+          resourcesList: resources,
+          hospitalName: e.data()['name'],
+          phoneNumber: e?.data()['contactNumber'] ?? "123456789",
+        ));
+      });
+
+      return hospitalEntity;
     } else {
       return null;
     }
   }
 
- List<Resource>  _getResourceList(List data, QuerySnapshot queryOfDocs) {
+  Future<List<Resource>> _getResourceList(List data) async {
+    List<Resource> resources = List();
 
+    await Future.forEach(data, (e) async {
+      // await data.forEach((e) async {
+      var resource = await _getResourceData(e['resReference'] as DocumentReference);
 
-
-    return data.map((e)  {
-
-
-
-      return Resource(
+      resources.add(Resource(
           countAvailable: e['resCount'],
-          refID:  _getResourceData(e['resReference'] as DocumentReference),
-          resourceName: e['resReference']);
-    }).toList();
+          refID: resource['resId'],
+          resourceName: resource['resName'],
+          resIcon: resource['resIcon']));
+      // });
+    });
+
+    return resources;
+  }
+
+  Future<Map<String, dynamic>> _getResourceData(DocumentReference ref) async {
+    print(" Roope path  ${ref.path}");
+
+    DocumentSnapshot snapshot = await _firebaseFirestore.doc(ref.path).get().catchError((e) {
+      print("error $e");
+    });
+    if (snapshot.exists) {
+      print("data exists");
+    } else {
+      print("data dont  exists");
+    }
+    print(snapshot.data()['resId']);
+    return snapshot.data();
   }
 
   @override
@@ -86,35 +111,25 @@ class IndiaHealthStackRepoImplementation extends IndiaHealthStackRepo {
     print(snapshot.data()['resId']);
   }
 
-  _getResourceData(DocumentReference data) async* {
-    String snapshot = await _firebaseFirestore
-        .collection('resources')
-        .doc(data.path)
-        .get()
-        .then((DocumentSnapshot value) {
-      return value.data()['resName'];
-    });
-    print(snapshot);
-    yield snapshot;
-  }
-
   @override
   Future<HospitalEntity> getHospitalDetails(int index) async {
     QuerySnapshot snapshot =
         await _firebaseFirestore.collection('hospitals').where("id", isEqualTo: index).get();
-    if(snapshot.docs.isNotEmpty){
+    List<Resource> resources =
+        await _getResourceList(snapshot?.docs[0].data()['resources'] as List<dynamic>);
+
+    if (snapshot.docs.isNotEmpty) {
       return HospitalEntity(
         uniqueID: snapshot.docs[0].data()['id'],
         mapLink: snapshot.docs[0].data()['mapLink'],
         lastUpdatedTimestamp: snapshot.docs[0].data()['lastUpdated'],
-        // resourcesList:  _getResourceList(e?.data()['resources'] as List<dynamic>,queryofdocs),
-        //resourcesList:_getResourceList(e?.data()['resources'] as DocumentReference),
+        pinCode: snapshot.docs[0].data()['pincode'],
+        resourcesList: resources,
         hospitalName: snapshot.docs[0].data()['name'],
         phoneNumber: snapshot.docs[0].data()['contactNumber'] ?? "123456789",
       );
-    }else{
+    } else {
       return null;
     }
-
   }
 }

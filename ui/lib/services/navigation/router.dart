@@ -15,9 +15,18 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
           builder: (context) => SetLocationOnMapWeb(null), settings: settings);
     case Routes.detailsPage:
+      String uniqueId;
       var parameters = settings.arguments as Map<String, dynamic>;
+      if(routingData["uniqueID"] ==null){
+        print(routingData["uniqueID"] );
+        uniqueId=parameters["uniqueID"];
+      }else{
+        print(routingData["uniqueID"] );
+        uniqueId = routingData["uniqueID"];
+      }
+
       return MaterialPageRoute(
-          builder: (context) => DetailsPageWidget(parameters["uniqueID"]), settings: settings);
+          builder: (context) => DetailsPageWidget(uniqueId), settings: settings);
     // case Routes.IFrameScreen:
     //   var parameters = settings.arguments as Map<String, dynamic>;
     //   return MaterialPageRoute(

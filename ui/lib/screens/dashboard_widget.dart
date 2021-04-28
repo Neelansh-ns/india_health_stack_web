@@ -89,7 +89,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     return stateList.map((Cities value) {
       return DropdownMenuItem<Cities>(
         value: value,
-        child: new Text(value.name),
+        child: Text(value.name),
       );
     }).toList();
   }
@@ -191,22 +191,33 @@ class _DashboardWidgetState extends State<DashboardWidget> {
       padding: const EdgeInsets.only(right: 24.0, left: 24),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              PillButton(
-                buttonText: "Oxygen Beds",
-                onPressed: () {},
-              ),
-              PillButton(
-                buttonText: "Oxygen Beds 2",
-                onPressed: () {},
-              ),
-              PillButton(
-                buttonText: "Oxygen Beds 3",
-                onPressed: () {},
-              ),
-            ],
+          StreamBuilder<List<String>>(
+            stream: _view.state.refreshPills,
+            builder: (context, snapshot) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  PillButton(
+                    buttonText: "Oxygen Beds",
+                    onPressed: (value) {
+                      _view.sortBeds("bo",value);
+                    },
+                  ),
+                  PillButton(
+                    buttonText: "Non Oxygen Beds",
+                    onPressed: (value) {
+                      _view.sortBeds("bwo",value);
+                    },
+                  ),
+                  PillButton(
+                    buttonText: "ICU Beds",
+                    onPressed: (value) {
+                      _view.sortBeds("icu",value);
+                    },
+                  ),
+                ],
+              );
+            }
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -215,8 +226,10 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 padding: const EdgeInsets.only(top: 14.0),
                 child: PillButton(
                   buttonText: "All Beds",
-                  isActive: true,
-                  onPressed: () {},
+                  isActive: _view.state.allBedsFlag,
+                  onPressed: (value) {
+                    _view.resetAllBedsFlag(value);
+                  },
                 ),
               ),
             ],
@@ -269,40 +282,15 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                             SizedBox(
                               height: 18,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Oxygen Beds - 5",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      height: 1.5),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  "Non oxygen Beds - 5",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      height: 1.0),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  "ICU Beds - 5",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      height: 1.5),
-                                ),
-                              ],
+                            StreamBuilder<List<String>>(
+                              stream: _view.state.refreshPills,
+                              builder: (context, refreshBool) {
+                                print("called stream builder ${refreshBool.data}");
+                                  return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: _getAvailabilityItems(snapshot.data[index].resourcesList,refreshBool.data)
+                                  );
+                              }
                             ),
                           ],
                         ),
@@ -355,5 +343,40 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         ],
       ),
     );
+  }
+
+  _getAvailabilityItems(List<Resource> data,List<String> refresh) {
+
+    print(" refresh status $refresh");
+
+    return data.map((e) {
+      if(!refresh.contains("all") && refresh.contains(e.refID)){
+        return Padding(
+          padding: const EdgeInsets.only(bottom:8.0),
+          child: Text(
+            "${e.resourceName} - ${e.countAvailable}",
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
+                color: Colors.white,
+                height: 1.5),
+          ),
+        );
+      }else{
+        return Padding(
+          padding: const EdgeInsets.only(bottom:8.0),
+          child: Text(
+            "${e.resourceName} - ${e.countAvailable}",
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
+                color: Colors.white,
+                height: 1.5),
+          ),
+        );
+      }
+    }).toList();
+
+
   }
 }

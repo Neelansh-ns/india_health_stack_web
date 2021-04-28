@@ -33,7 +33,7 @@ class PrimaryButton extends StatelessWidget {
             decoration: BoxDecoration(
                 color: isActive ? Color(0xFF6200EE) : Color(0xffb0b0b0),
                 borderRadius: BorderRadius.circular(cornerRadius ?? 2)),
-            height: 48,
+            height: 34,
             alignment: Alignment.center,
             width: MediaQuery.of(context).size.width,
             child: isLoading
@@ -58,7 +58,7 @@ class PrimaryButton extends StatelessWidget {
                         child: Text(
                           '$buttonText'?.toUpperCase(),
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 18),
+                          style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       )
                     ],
