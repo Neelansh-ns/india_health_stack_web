@@ -60,85 +60,104 @@ class _DetailsPageWidgetState extends State<DetailsPageWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Text(
-                          updatedTimeText,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 26.0, right: 16, left: 16),
-                        child: Text(snapshot.data.hospitalName,
-                            style:
-                                TextStyle(fontSize: 20, fontWeight: FontWeight.w800, height: 1.5),
-                            textAlign: TextAlign.start),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.only(top: 20.0, right: 16, left: 16),
-                          child: Column(
-                            children: _getDetailRowList(snapshot.data.resourcesList),
-                          )),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16, left: 16),
-                        child: Text(
-                          "Pincode - ${snapshot.data.pinCode.toString()}",
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16, left: 16),
-                        child: GestureDetector(
-                          onTap: () {
-                            launch("tel://${snapshot.data.phoneNumber}");
-                          },
-                          child:Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Phone Number - ${snapshot.data.phoneNumber.toString()}",
-                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.center,
-                              ),
-                              Icon(Icons.call,size: 20.0,color: Color(0xFF6200EE),)
-                            ],
+                  SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text(
+                            updatedTimeText,
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16, left: 16),
-                        child: GestureDetector(
-                          onTap: () {
-                            launch(snapshot.data.mapLink);
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "GPS Location ",
-                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.center,
-                              ),
-                              Icon(Icons.assistant_navigation,size: 20.0,color: Color(0xFF6200EE),)
-                            ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 26.0, right: 16, left: 16),
+                          child: Text(snapshot.data.hospitalName,
+                              style:
+                                  TextStyle(fontSize: 20, fontWeight: FontWeight.w800, height: 1.5),
+                              textAlign: TextAlign.start),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(top: 20.0, right: 16, left: 16),
+                            child: Column(
+                              children: _getDetailRowList(snapshot.data.resourcesList),
+                            )),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16, left: 16),
+                          child: Text(
+                            "Pincode - ${snapshot.data.pinCode.toString()}",
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 24,
+                        ),
+                        snapshot.data.paymentType != null?Padding(
+                          padding: const EdgeInsets.only(right: 16, left: 16,bottom: 24),
+                          child: Text(
+                            "Payment Type - ${snapshot.data.paymentType.toString()}",
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        ):Container(),
+                        snapshot.data.address != null?Padding(
+                          padding: const EdgeInsets.only(right: 16, left: 16,bottom: 24),
+                          child: Text(
+                            "Address - ${snapshot.data.address.toString()}",
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.left,
+                          ),
+                        ):Container(),
+
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16, left: 16),
+                          child: GestureDetector(
+                            onTap: () {
+                              launch("tel://${snapshot.data.phoneNumber}");
+                            },
+                            child:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Phone Number - ${snapshot.data.phoneNumber.toString()}",
+                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Icon(Icons.call,size: 20.0,color: Color(0xFF6200EE),)
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 24,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16, left: 16),
+                          child: GestureDetector(
+                            onTap: () {
+                              launch(snapshot.data.mapLink);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "GPS Location ",
+                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Icon(Icons.assistant_navigation,size: 20.0,color: Color(0xFF6200EE),)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,

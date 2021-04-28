@@ -1,4 +1,5 @@
 import 'package:entities/states.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:ui/factory/core/base_view.dart';
 import 'package:ui/factory/core/base_view_out_state.dart';
@@ -8,6 +9,7 @@ import 'package:use_case/maps_location/get_state_list_usecase.dart';
 import 'package:use_case/maps_location/get_city_list_usecase.dart';
 import 'package:use_case/maps_location/get_hospital_data_list.dart';
 import 'package:entities/hospital_entity.dart';
+import 'package:oktoast/oktoast.dart';
 
 class DashboardView extends BaseView<DashboardViewState, DashboardViewOutState> {
   DashboardView(this._getStateListUseCase, this._getCityListUseCase, this._getHospitalListUseCase);
@@ -61,6 +63,9 @@ class DashboardView extends BaseView<DashboardViewState, DashboardViewOutState> 
   }
 
   sortBeds(String s,bool value) {
+
+    showToast("Sorting Feature will be available soon",backgroundColor: Colors.grey,
+        animationDuration: Duration(milliseconds: 10));
     state._refreshPills.value.add(s);
 
     state.allBedsFlag = false;

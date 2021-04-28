@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:entities/states.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:ui/common/pill_button.dart';
 import 'package:ui/factory/view_model/bounce_ltr_view_factory.dart';
 import 'package:ui/navigation/navigation_service.dart';
@@ -180,8 +181,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
       padding: const EdgeInsets.only(top: 28.0, bottom: 14, left: 24),
       child: Text(
         title,
-        style: TextStyle(
-            color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+        style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
       ),
     );
   }
@@ -254,15 +254,14 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      childAspectRatio: 1,
+                      childAspectRatio: MediaQuery.of(context).size.width /
+                          (MediaQuery.of(context).size.height / 2),
                       crossAxisCount: 2),
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
                         _navigationService.navigateTo(Routes.detailsPage,
-                            arguments: {
-                              "uniqueID": "${snapshot.data[index].uniqueID}"
-                            });
+                            arguments: {"uniqueID": "${snapshot.data[index].uniqueID}"});
                       },
                       child: Container(
                         height: 140,
@@ -283,25 +282,17 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                             SizedBox(
                               height: 18,
                             ),
-                            StreamBuilder<List<String>>(
-                                stream: _view.state.refreshPills,
-                                builder: (context, refreshBool) {
-                                  print(
-                                      "called stream builder ${refreshBool.data}");
-                                  return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: _getAvailabilityItems(
-                                          snapshot.data[index].resourcesList,
-                                          refreshBool.data));
-                                }),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: _getAvailabilityItems(
+                                  snapshot.data[index].resourcesList,
+                                ))
                           ],
                         ),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.25),
                           borderRadius: BorderRadius.circular(2.0),
-                          border:
-                              Border.all(color: Colors.black.withOpacity(0.20)),
+                          border: Border.all(color: Colors.black.withOpacity(0.20)),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey,
@@ -329,55 +320,42 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   }
 
   _getLocationButton() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 24.0, left: 24, top: 18),
-      child: Row(
-        children: [
-          Icon(
-            Icons.gps_fixed_sharp,
-            color: Color(0xFF6200EE),
-          ),
-          SizedBox(
-            width: 12,
-          ),
-          Text(
-            "Use current location",
-            style: TextStyle(color: Color(0xFF6200EE), fontSize: 14),
-          )
-        ],
+    return GestureDetector(
+      onTap: () {
+        showToast("Location not supported by browser",
+            backgroundColor: Colors.grey, animationDuration: Duration(milliseconds: 10));
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(right: 24.0, left: 24, top: 18),
+        child: Row(
+          children: [
+            Icon(
+              Icons.gps_fixed_sharp,
+              color: Color(0xFF6200EE),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+            Text(
+              "Use current location",
+              style: TextStyle(color: Color(0xFF6200EE), fontSize: 14),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  _getAvailabilityItems(List<Resource> data, List<String> refresh) {
-    print(" refresh status $refresh");
-
+  _getAvailabilityItems(List<Resource> data) {
     return data.map((e) {
-      if (!refresh.contains("all") && refresh.contains(e.refID)) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Text(
-            "${e.resourceName} - ${e.countAvailable}",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-                color: Colors.white,
-                height: 1.5),
-          ),
-        );
-      } else {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Text(
-            "${e.resourceName} - ${e.countAvailable}",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-                color: Colors.white,
-                height: 1.5),
-          ),
-        );
-      }
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Text(
+          "${e.resourceName} - ${e.countAvailable}",
+          style: TextStyle(
+              fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white, height: 1.5),
+        ),
+      );
     }).toList();
   }
 }

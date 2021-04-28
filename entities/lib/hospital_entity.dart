@@ -2,6 +2,8 @@ class HospitalEntity {
   String hospitalName;
   int uniqueID;
   String pinCode;
+  String paymentType;
+  String address;
   String mapLink;
   String phoneNumber;
   int lastUpdatedTimestamp;
@@ -14,7 +16,9 @@ class HospitalEntity {
         this.uniqueID,
         this.mapLink,
         this.pinCode,
-        this.phoneNumber});
+        this.phoneNumber,
+        this.address,
+      this.paymentType});
 }
 
 class Resource {
