@@ -329,7 +329,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                           color: Colors.grey.withOpacity(0.1))),
                                   child: SingleChildScrollView(
                                     child: Padding(
-                                      padding: const EdgeInsets.all(24.0),
+                                      padding: const EdgeInsets.all(16.0),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
