@@ -268,15 +268,16 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                               },
                               child: Container(
                                 height: 240,
-                                width: constraints.maxWidth > 1250 ? 600 : 200,
+                                width: constraints.maxWidth > 1250 ? 600 : 150,
                                 // constraints: BoxConstraints(maxWidth: 400,minWidth: 200),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(24.0),
-                                ),
+                                    color: Colors.grey.withOpacity(0.05),
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    border: Border.all(
+                                        color: Colors.grey.withOpacity(0.1))),
                                 child: SingleChildScrollView(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(24.0),
+                                    padding: const EdgeInsets.all(16.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -319,12 +320,13 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                 child: Container(
                                   height: 240,
                                   width:
-                                      constraints.maxWidth > 1250 ? 600 : 200,
+                                      constraints.maxWidth > 1250 ? 600 : 150,
                                   // constraints: BoxConstraints(maxWidth: 400,minWidth: 200),
                                   decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(24.0),
-                                  ),
+                                      color: Colors.grey.withOpacity(0.05),
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      border: Border.all(
+                                          color: Colors.grey.withOpacity(0.1))),
                                   child: SingleChildScrollView(
                                     child: Padding(
                                       padding: const EdgeInsets.all(24.0),
@@ -411,7 +413,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
           "${e.resourceName} - ${e.countAvailable}",
           style: TextStyle(
               fontWeight: FontWeight.w500,
-              fontSize: 16,
+              fontSize: 14,
               color: Colors.black,
               height: 1.5),
         ),
